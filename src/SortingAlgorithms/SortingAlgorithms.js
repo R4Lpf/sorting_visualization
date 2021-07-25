@@ -1,3 +1,10 @@
+function swap(auxillaryArray, firstIdx, secondIdx) {
+    let temp = auxillaryArray[firstIdx];
+    auxillaryArray[firstIdx] = auxillaryArray[secondIdx];
+    auxillaryArray[secondIdx] = temp;
+}
+
+
 export function getMergeSortAnimations(array) {
     const animations = [];
     if (array.length <= 1) return array;
@@ -149,11 +156,7 @@ function partitionArray(auxiliaryArray, startIdx, endIdx, animations){
 }
 
 
-function swap(auxillaryArray, firstIdx, secondIdx) {
-    let temp = auxillaryArray[firstIdx];
-    auxillaryArray[firstIdx] = auxillaryArray[secondIdx];
-    auxillaryArray[secondIdx] = temp;
-}
+
 
 function randomIntFromInterval(min, max) {
     // min and max included
@@ -191,6 +194,71 @@ function bubbleSort(arr,animations){
     }
   }
 
-  // #############################################################################################################################################
+// #############################################################################################################################################
 
-  
+//heap sort
+export function getHeapSortAnimations(array) {
+    const animations = [];
+    if (array.length <= 1) return array;
+    heapSort(array, animations);
+    return animations
+
+}
+
+function heap_root(array, i, animations) {
+    var left = 2 * i + 1;
+    var right = 2 * i + 2;
+    var max = i;
+    
+    if (left < array.length && array[left] > array[max]) {
+        if (animations){
+            animations.push(["comparison1", left, max]);
+            animations.push(["comparison2", left, max]);
+        }
+        max = left;
+    }
+
+    if (right < array.length && array[right] > array[max]) {
+        if (animations){
+            animations.push(["comparison1", right, max]);
+            animations.push(["comparison2", right, max]);
+        }
+        max = right;
+    }
+
+    if (max != i) {
+        if(animations){
+            animations.push(["comparison1", i, max]);
+            animations.push(["swap", i, array[max]]);
+            animations.push(["swap", max, array[i]]);
+            animations.push(["comparison2", i, max]);
+        }
+        swap(array, i, max);
+        heap_root(array, max);
+    }
+    console.log("animazioni heap_root")
+    console.log(animations)
+}
+
+function heapSort(array, animations) {
+    console.log("animazioni heapSort");
+    console.log(animations);
+    array.length = array.length;
+
+    for (var i = Math.floor(array.length / 2); i >= 0; i -= 1)      {
+        heap_root(array, i, animations);
+      }
+
+    for (i = array.length - 1; i > 0; i--) {
+        animations.push(["comparison1", i, 0]);
+        animations.push(["swap", i, array[0]]);
+        animations.push(["swap", 0, array[i]]);
+        animations.push(["comparison2", i, 0]);
+        swap(array, 0, i);
+        array.length--;
+      
+      
+        heap_root(array, 0, animations);
+    }
+}
+
