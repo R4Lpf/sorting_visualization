@@ -177,11 +177,11 @@ function bubbleSort(arr,animations){
     while(iters > 0) {
         let swapped = false;
         for(let i = 0; i < iters; ++i) {
-            animations.push(["comparision1", i, i + 1]);
-            animations.push(["comparision2", i, i + 1]);
+            animations.push(["comparison1", i, i + 1]);
+            animations.push(["comparison2", i, i + 1]);
             if(arr[i] > arr[i + 1]) {
                 swapped = true;
-                animations.push(["swap", i, arr[i + 1]]);
+                animations.push(["swap", i, arr[i+1]]);
                 animations.push(["swap", i + 1, arr[i]]);
                 swap(arr, i, i + 1);
             }
