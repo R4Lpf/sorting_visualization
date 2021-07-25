@@ -1,7 +1,15 @@
+body{
+    background-color: rgba(127, 255, 212, 0.192);
+    padding-bottom: 20px;
+}
+footer{
+    background-color: aquamarine;
+}
 .array-container{
     /* position:absolute; */
     left: 100px;
     align-self: center;
+    
 }
 
 .array-bar {

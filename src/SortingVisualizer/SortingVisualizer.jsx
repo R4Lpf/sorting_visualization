@@ -225,6 +225,7 @@ export default class SortingVisualizer extends React.Component{
                     </div>
                 </div>
             </body>
+            
         );
     }
 }
