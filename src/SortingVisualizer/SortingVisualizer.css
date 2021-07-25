@@ -1,6 +1,7 @@
 .array-container{
-    position:absolute;
+    /* position:absolute; */
     left: 100px;
+    align-self: center;
 }
 
 .array-bar {
@@ -8,4 +9,60 @@
     /* background-color: pink; */
     display: inline-block;
     margin: 0 1px;
+
+}
+
+header{
+    padding: 5px;
+    background-color: aquamarine;
+    
+    margin-bottom: 30px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    
+}
+
+.title {
+    background-color: rgb(78, 236, 184);
+
+    /* margin-left: 45%;
+    margin-right: 45%; */
+    opacity: 100%;
+    padding: 15px;
+    border-radius: 20px;
+    font-size: larger;
+    font-weight: bolder;
+    font-style: oblique;
+    color: rgb(36, 49, 49);
+    letter-spacing: 0.04em;
+
+}
+
+button {
+    color: rgb(36, 49, 49);
+    text-transform: uppercase;
+    background-color: aquamarine;
+    letter-spacing: 0.04em;
+    margin-bottom: 0;
+    text-align: center;
+    /* touch-action: manipulation; */
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    font-size: 10px;
+    line-height: 2;
+    font-weight: 500;
+    border-radius: 20px;
+    user-select: none;
+    margin-left: 1px;
+    margin-right: 1px;
+
+}
+
+button:hover
+{
+    transition: 0.3s;
+    border-bottom: thick solid rgb(101, 214, 177);
+ 
 }
