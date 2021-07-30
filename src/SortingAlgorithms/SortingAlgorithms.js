@@ -1,9 +1,22 @@
+import { waitForElementToBeRemoved } from "@testing-library/react";
+
 function swap(auxillaryArray, firstIdx, secondIdx) {
     let temp = auxillaryArray[firstIdx];
     auxillaryArray[firstIdx] = auxillaryArray[secondIdx];
     auxillaryArray[secondIdx] = temp;
 }
 
+function randomIntFromInterval(min, max) {
+    // min and max included
+    return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+function floor_log(a) {
+    return (Math.floor(Math.log(a)/Math.log(2))) << 0;
+}
+
+// ###########################################################################################################################################
+// merge sort
 
 export function getMergeSortAnimations(array) {
     const animations = [];
@@ -66,6 +79,7 @@ function doMerge(
 }
 
 // ###########################################################################################################################################
+// insertion sort
 
 export function getInsertionSortAnimations(array) {
     const animations = [];
@@ -100,7 +114,7 @@ function insertionSort(arr, n, animations)
 }
 
 // ###########################################################################################################################################
-
+// quick sort
 
 export function getQuickSortAnimations(array) {
     const animations = [];
@@ -158,13 +172,8 @@ function partitionArray(auxiliaryArray, startIdx, endIdx, animations){
 
 
 
-function randomIntFromInterval(min, max) {
-    // min and max included
-    return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
 // #############################################################################################################################################
-
+// bubble sort
 
 export function getBubbleSortAnimations(array) {
     const animations = [];
@@ -192,73 +201,293 @@ function bubbleSort(arr,animations){
         if(swapped === false) break;
         iters--;
     }
-  }
+}
 
 // #############################################################################################################################################
+// heap sort
 
-//heap sort
 export function getHeapSortAnimations(array) {
     const animations = [];
     if (array.length <= 1) return array;
-    heapSort(array, animations);
+    heapSort(array, array.length, animations);
+    //heapSort(array, 0, array.length-1, animations)
     return animations
 
 }
 
-function heap_root(array, i, animations) {
-    var left = 2 * i + 1;
-    var right = 2 * i + 2;
-    var max = i;
-    
-    if (left < array.length && array[left] > array[max]) {
-        if (animations){
-            animations.push(["comparison1", left, max]);
-            animations.push(["comparison2", left, max]);
-        }
-        max = left;
-    }
 
-    if (right < array.length && array[right] > array[max]) {
-        if (animations){
-            animations.push(["comparison1", right, max]);
-            animations.push(["comparison2", right, max]);
-        }
-        max = right;
-    }
+function heapSort(array, n, animations) {
 
-    if (max != i) {
-        if(animations){
-            animations.push(["comparison1", i, max]);
-            animations.push(["swap", i, array[max]]);
-            animations.push(["swap", max, array[i]]);
-            animations.push(["comparison2", i, max]);
-        }
-        swap(array, i, max);
-        heap_root(array, max);
-    }
-    console.log("animazioni heap_root")
-    console.log(animations)
-}
-
-function heapSort(array, animations) {
-    console.log("animazioni heapSort");
-    console.log(animations);
-    array.length = array.length;
-
-    for (var i = Math.floor(array.length / 2); i >= 0; i -= 1)      {
-        heap_root(array, i, animations);
+    for (var i = Math.floor(n / 2); i >= 0; i--)      {
+        heap_root(array, n, i, animations);
       }
 
-    for (i = array.length - 1; i > 0; i--) {
+    for (i = n - 1; i >= 0; i--) {
         animations.push(["comparison1", i, 0]);
         animations.push(["swap", i, array[0]]);
         animations.push(["swap", 0, array[i]]);
         animations.push(["comparison2", i, 0]);
         swap(array, 0, i);
-        array.length--;
-      
-      
-        heap_root(array, 0, animations);
+        n--;      
+        heap_root(array, i, 0, animations);
+    }
+
+    console.log(array)
+}
+
+function heap_root(array, len, i, animations) {
+    var left = 2 * i + 1;
+    var right = left + 1;
+    var max = i; 
+    if (left < len){
+        animations.push(["comparison1", left, max]);
+        animations.push(["comparison2", left, max]);
+        if (array[left] > array[max]) {
+            max = left;
+        }
+    }
+
+    if (right < len) {
+        animations.push(["comparison1", right, max]);
+        animations.push(["comparison2", right, max]);
+        if (array[right] > array[max]) {
+            max = right;
+        }
+    }
+    
+    if (max != i) {
+        animations.push(["comparison1", i, max]);
+        animations.push(["swap", i, array[max]]);
+        animations.push(["swap", max, array[i]]);
+        animations.push(["comparison2", i, max]);
+        
+        swap(array, i, max);
+        heap_root(array, len, max, animations);
     }
 }
+
+// function heapSort(array, startIdx, endIdx, animations){
+//     var n = endIdx - startIdx, i;
+//     for (i = Math.floor(n/2); i>=1; i--) {
+//         downheap(array, i, n, startIdx, animations);
+//     }
+//     for (i = n; i>1; i--) {
+        
+//         animations.push(["comparison1", startIdx, startIdx+i-1]);
+//         animations.push(["swap", startIdx, array[startIdx+i-1]]);
+//         animations.push(["swap", startIdx+i-1, array[startIdx]]);
+//         animations.push(["comparison2", startIdx, startIdx+i-1]); 
+//         swap(array, startIdx, startIdx+i-1);
+//         downheap(array, 1, i-1, startIdx, animations);
+//     }
+    
+//     console.log(array)
+// }
+
+// function downheap(array, i, n, startIdx, animations){
+//     var d = array[startIdx+i-1];
+//     var child;
+//     while (i <= Math.floor(n/2-1)) {
+//         child = 2*i;
+//         if (child >= n){
+//             child = child-1
+//         }
+//         animations.push(["comparison1", child, n]);
+//         animations.push(["comparison1", startIdx+child-1, startIdx + child]);
+//         animations.push(["comparison2", child, n]);
+//         animations.push(["comparison2", startIdx+child-1, startIdx + child]);
+//         if (child < n && array[startIdx+child-1] < array[startIdx + child]){
+//             child++;
+//         }
+        
+//         animations.push(["comparison1", startIdx+child-1, startIdx+i-1]);
+//         animations.push(["comparison2", startIdx+child-1, startIdx+i-1]);
+//         if (d >= array[startIdx+child-1]) break;
+//         animations.push(["overwrite", startIdx+i-1, array[startIdx+child-1]]);
+//         array[startIdx+i-1] = array[startIdx+child-1];
+//         i = child;
+//     }
+//     array[startIdx + i - 1] = d;
+// }
+
+
+
+// #############################################################################################################################################
+// tim sort
+
+export function getTimSortAnimations(array) {
+    const animations = [];
+    if (array.length <= 1) return array;
+    timSort(array, animations);
+    return animations
+
+}
+
+function timSort(array, animations){
+
+}
+
+
+// #############################################################################################################################################
+// intro sort
+
+//var size_threshold = 16;
+
+const iParent = i => Math.floor((i - 1) / 2);
+const iLeftChild = i => 2 * i + 1;
+
+export function getIntroSortAnimations(array) {
+    const animations = [];
+    if (array.length <= 1) return array;
+    const len = array.length;
+    let maxdepth = Math.floor(Math.log(len)) * 2;
+    introSort(array, 0, len - 1, maxdepth, (a, b) => (a - b), animations);
+    //introSort(array, 0, array.length, 2 * floor_log(array.length), animations);
+    console.log(array)
+    return animations
+
+}
+
+function introSort(array, startIdx, endIdx, maxdepth, cmpf, animations) {
+    if (endIdx - startIdx < 16) {
+      insertionSort2(array, startIdx, endIdx, cmpf, animations);
+      return;
+    }
+
+    if (maxdepth === 0) {
+      heapSort2(array, startIdx, endIdx, cmpf, animations);
+      return;
+    }
+
+    const p = partition(array, startIdx, endIdx, cmpf, animations);
+    introSort(array, startIdx, p, maxdepth - 1, cmpf, animations);
+    introSort(array, p + 1, endIdx, maxdepth - 1, cmpf, animations);
+  }
+
+function partition(array, startIdx, endIdx, cmpf, animations) {
+    const pv = pivot(array, startIdx, endIdx, cmpf, animations);
+    let i = startIdx - 1,
+        j = endIdx + 1;
+    while (i < j) {
+        do i++; while (cmpf(array[i], pv) < 0);
+        do j--; while (cmpf(array[j], pv) > 0);
+        animations.push(["comparison1", i, j]);
+        animations.push(["comparison2", i, j]);
+        if (i >= j) break;
+        animations.push(["comparison1", i, j]);
+        animations.push(["swap", i, array[j]]);
+        animations.push(["swap", j, array[i]]);
+        animations.push(["comparison2", i, j]);
+        swap(array, i, j);
+    }
+    return j;
+  }
+
+function pivot(array, startIdx, endIdx, cmpf, animations) {
+    const mid = Math.floor((startIdx + endIdx) / 2);
+
+    if (cmpf(array[mid], array[startIdx]) < 0) 
+        {animations.push(["comparison1", mid, startIdx]);
+        animations.push(["swap", mid, array[startIdx]]);
+        animations.push(["swap", startIdx, array[mid]]);
+        animations.push(["comparison2", mid, startIdx]);
+        swap(array, startIdx, mid);}
+    if (cmpf(array[endIdx], array[startIdx]) < 0)
+        {animations.push(["comparison1", endIdx, startIdx]);
+        animations.push(["swap", endIdx, array[startIdx]]);
+        animations.push(["swap", startIdx, array[endIdx]]);
+        animations.push(["comparison2", endIdx, startIdx]);
+        swap(array, startIdx, endIdx);}
+    if (cmpf(array[mid], array[endIdx]) < 0)
+        {animations.push(["comparison1", endIdx, mid]);
+        animations.push(["swap", endIdx, array[mid]]);
+        animations.push(["swap", mid, array[endIdx]]);
+        animations.push(["comparison2", endIdx, mid]);
+        swap(array, mid, endIdx);}
+    return array[endIdx];
+}
+
+  function insertionSort2(array, left, right, cmpf, animations) {
+    let i, j, key;
+    for (i = left + 1; i <= right; i++) {
+        key = array[i];
+        j = i - 1;
+        animations.push(["comparison1",j,i]);
+        animations.push(["comparison2",j,i]);
+        while (j >= left && cmpf(array[j], key) > 0) {
+            animations.push(["overwrite",j+1, array[j]]);
+            array[j + 1] = array[j];
+            j = j - 1;
+            if(j>=0) {
+                animations.push(["comparison1",j,i]);
+                animations.push(["comparison2",j,i]);
+            }
+        }
+        animations.push(["overwrite",j+1,key])
+        array[j + 1] = key;
+    }
+  }
+
+
+
+  function heapSort2(array, startIdx, endIdx, cmpf, animations) {
+    heapify(array, startIdx, endIdx, cmpf, animations);
+    let end = endIdx;
+    while (end > startIdx) {
+        animations.push(["comparison1", endIdx, startIdx]);
+        animations.push(["swap", endIdx, array[startIdx]]);
+        animations.push(["swap", startIdx, array[endIdx]]);
+        animations.push(["comparison2", endIdx, startIdx]);
+        swap(array, end, startIdx);
+        animations.push(["overwrite",end,end-1])
+        end = end - 1;
+        siftDown(array, startIdx, end, cmpf, animations);
+    }
+  }
+
+  function heapify(array, startIdx, endIdx, cmpf, animations) {
+    let start = iParent(endIdx);
+
+    while (start >= startIdx) {
+      siftDown(array, start, endIdx, cmpf, animations);
+      animations.push(["overwrite",start,start-1])
+      start = start - 1;
+    }
+  }
+
+  function siftDown(array, start, end, cmpf, animations) {
+    let root = start, 
+        child, toSwap;
+
+    while (iLeftChild(root) <= end) {
+        child = iLeftChild(root);
+        toSwap = root;
+        if (cmpf(array[toSwap], array[child]) < 0) {
+            animations.push(["overwrite",toSwap,child])
+            toSwap = child;
+        }
+        animations.push(["comparison1", end, child + 1]);
+        animations.push(["swap", end, array[child + 1]]);
+        animations.push(["swap", child + 1, array[end]]);
+        animations.push(["comparison2", end, child + 1]);
+        if ((child + 1) <= end && cmpf(array[toSwap], array[child+1]) < 0){
+            animations.push(["overwrite",toSwap,child+1])
+            toSwap = child + 1;
+        }
+        animations.push(["comparison1", toSwap, root]);
+        animations.push(["comparison1", toSwap, root]);
+        if (toSwap === root)
+            return;
+        animations.push(["comparison1", root, toSwap]);
+        animations.push(["swap", root, array[toSwap]]);
+        animations.push(["swap", toSwap, array[root]]);
+        animations.push(["comparison2", root, toSwap]);
+        swap(array, root, toSwap);
+        animations.push(["overwrite", root, toSwap])
+        root = toSwap;
+    }
+  }
+
+
+
 
