@@ -318,13 +318,116 @@ function heap_root(array, len, i, animations) {
 export function getTimSortAnimations(array) {
     const animations = [];
     if (array.length <= 1) return array;
-    timSort(array, animations);
+    timSort(array, array.length, animations);
+    console.log(array);
     return animations
 
 }
 
-function timSort(array, animations){
+let MIN_MERGE = 32;
+ 
+function minRunLength(n) {
+    let r = 0;
+    while (n >= MIN_MERGE)
+    {
+        r |= (n & 1);
+        n >>= 1;
+    }
+    return n + r;
+}
+ 
+function timsertionSort(array, left, right, animations) {
+    for(let i = left + 1; i <= right; i++) {
+        let key = array[i];
+        let j = i - 1;
+        animations.push(["comparison1",j,i]);
+        animations.push(["comparison2",j,i]);
+        while (j >= left && array[j] > key) {
+            animations.push(["overwrite",j+1, array[j]]);
+            array[j + 1] = array[j];
+            j--;
+            if(j>=0) {
+                animations.push(["comparison1",j,i]);
+                animations.push(["comparison2",j,i]);
+            }
+        }
+        animations.push(["overwrite",j+1,key])
+        array[j + 1] = key;
+    }
+}
 
+ 
+function merge(array, startIdx, middleIdx, endIdx, animations) {
+
+    let halfLength1 = middleIdx - startIdx + 1;
+    let halfLength2 = endIdx - middleIdx;
+    let left = new Array(halfLength1);
+    let right = new Array(halfLength2);
+
+    for(let x = 0; x < halfLength1; x++) {
+        animations.push(["overwrite", x, array[startIdx + x]])
+        left[x] = array[startIdx + x];
+    }
+    for(let x = 0; x < halfLength2; x++) {
+        animations.push(["overwrite", middleIdx + x, array[middleIdx + 1 + x]])
+        right[x] = array[middleIdx + 1 + x];
+    }
+ 
+    let i = 0;
+    let j = 0;
+    let k = startIdx;
+    
+    while (i < halfLength1 && j < halfLength2) {
+        animations.push(["comparison1",j,i]);
+        animations.push(["comparison2",j,i]);
+        if (left[i] <= right[j]) {
+            animations.push(["overwrite", k, left[i]])
+            array[k] = left[i];
+            i++;
+        }
+        else {
+            animations.push(["overwrite", k, right[j]])
+            array[k] = right[j];
+            j++;
+        }
+        k++;
+    }
+ 
+    while (i < halfLength1) {
+        animations.push(["comparison1",i,i]);
+        animations.push(["comparison2",i,i]);
+        animations.push(["overwrite", k, left[i]])
+        array[k] = left[i];
+        k++;
+        i++;
+    }
+
+    while (j < halfLength2) {
+        animations.push(["comparison1",j,j]);
+        animations.push(["comparison2",j,j]);
+        animations.push(["overwrite", k, right[j]])
+        array[k] = right[j];
+        k++;
+        j++;
+    }
+}
+
+function  timSort(array, n, animations)
+{
+    let minRun = minRunLength(MIN_MERGE);
+        
+    for(let i = 0; i < n; i += minRun){
+        timsertionSort(array, i, Math.min((i + MIN_MERGE - 1), (n - 1)), animations);
+    }
+ 
+    for (let size = minRun; size < n; size = 2 * size) {
+        for (let left = 0; left < n; left += 2 * size) {
+            let mid = left + size - 1;
+            let right = Math.min((left + 2 * size - 1),(n - 1));
+
+            if (mid < right) merge(array, left, mid, right, animations);
+        }
+    }
 }
 
 
@@ -350,7 +453,7 @@ export function getIntroSortAnimations(array) {
 
 function introSort(array, startIdx, endIdx, maxdepth, cmpf, animations) {
     if (endIdx - startIdx < 16) {
-      insertionSort2(array, startIdx, endIdx, cmpf, animations);
+      introsertionSort(array, startIdx, endIdx, cmpf, animations);
       return;
     }
 
@@ -383,31 +486,41 @@ function partition(array, startIdx, endIdx, cmpf, animations) {
     return j;
   }
 
+
+
 function pivot(array, startIdx, endIdx, cmpf, animations) {
     const mid = Math.floor((startIdx + endIdx) / 2);
-
-    if (cmpf(array[mid], array[startIdx]) < 0) 
-        {animations.push(["comparison1", mid, startIdx]);
+    animations.push(["comparison1", mid, startIdx]);
+    animations.push(["comparison2", mid, startIdx]);
+    if (cmpf(array[mid], array[startIdx]) < 0) {
+        animations.push(["comparison1", mid, startIdx]);
         animations.push(["swap", mid, array[startIdx]]);
         animations.push(["swap", startIdx, array[mid]]);
         animations.push(["comparison2", mid, startIdx]);
-        swap(array, startIdx, mid);}
-    if (cmpf(array[endIdx], array[startIdx]) < 0)
-        {animations.push(["comparison1", endIdx, startIdx]);
+        swap(array, startIdx, mid);
+    }
+    animations.push(["comparison1", endIdx, startIdx]);
+    animations.push(["comparison2", endIdx, startIdx]);
+    if (cmpf(array[endIdx], array[startIdx]) < 0) {
+        animations.push(["comparison1", endIdx, startIdx]);
         animations.push(["swap", endIdx, array[startIdx]]);
         animations.push(["swap", startIdx, array[endIdx]]);
         animations.push(["comparison2", endIdx, startIdx]);
-        swap(array, startIdx, endIdx);}
-    if (cmpf(array[mid], array[endIdx]) < 0)
-        {animations.push(["comparison1", endIdx, mid]);
+        swap(array, startIdx, endIdx);
+    }
+    animations.push(["comparison1", endIdx, mid]);
+    animations.push(["comparison2", endIdx, mid]);
+    if (cmpf(array[mid], array[endIdx]) < 0) {
+        animations.push(["comparison1", endIdx, mid]);
         animations.push(["swap", endIdx, array[mid]]);
         animations.push(["swap", mid, array[endIdx]]);
         animations.push(["comparison2", endIdx, mid]);
-        swap(array, mid, endIdx);}
+        swap(array, mid, endIdx);
+    }
     return array[endIdx];
 }
 
-  function insertionSort2(array, left, right, cmpf, animations) {
+function introsertionSort(array, left, right, cmpf, animations) {
     let i, j, key;
     for (i = left + 1; i <= right; i++) {
         key = array[i];

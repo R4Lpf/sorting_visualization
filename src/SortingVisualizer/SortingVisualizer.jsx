@@ -8,7 +8,7 @@ import * as SortingAlgorithms from '../SortingAlgorithms/SortingAlgorithms.js'
 const ANIMATION_SPEED_MS = 1;
 
 // Change this value for the number of bars (value) in the array.
-const NUMBER_OF_ARRAY_BARS = 200;
+const NUMBER_OF_ARRAY_BARS = 100;
 
 // This is the main color of the array bars.
 const PRIMARY_COLOR = 'turquoise';
@@ -193,6 +193,32 @@ export default class SortingVisualizer extends React.Component{
     }
 
     timSort(){
+        const animations = SortingAlgorithms.getTimSortAnimations(this.state.array);
+        console.log(animations)
+        for (let i = 0; i<animations.length; i++){
+            const arrayBars = document.getElementsByClassName('array-bar');
+            const isColorChange = (animations[i][0] === "comparison1") || (animations[i][0] === "comparison2");
+            if (isColorChange == true){
+                const [comparison, barOneIdx, barTwoIdx] = animations[i];
+                const barOneStyle = arrayBars[barOneIdx].style;
+                const barTwoStyle = arrayBars[barTwoIdx].style;
+                const color = (animations[i][0] === "comparison1") ? SECONDARY_COLOR : PRIMARY_COLOR;
+                setTimeout(() => {
+                    barOneStyle.backgroundColor = color;
+                    barTwoStyle.backgroundColor = color;
+                }, i * ANIMATION_SPEED_MS);
+            }
+            else {
+                const [swap, barOneIdx, newHeight] = animations[i];
+                if (barOneIdx === -1) {
+                    continue;
+                }
+                const barOneStyle = arrayBars[barOneIdx].style;
+                setTimeout(() => {
+                    barOneStyle.height = `${newHeight}px`
+                }, i * ANIMATION_SPEED_MS);
+            }
+        }
 
     }
     
@@ -255,8 +281,9 @@ export default class SortingVisualizer extends React.Component{
                         <button onClick = {() => this.mergeSort()}>Merge Sort</button>
                         <button onClick = {() => this.quickSort()}>Quick Sort</button>
                         <button onClick = {() => this.heapSort()}>Heap Sort</button>
-                        <button onClick = {() => this.timSort()} class = "not-implemented">Tim Sort</button>
+                        <button onClick = {() => this.timSort()} >Tim Sort</button>
                         <button onClick = {() => this.introSort()} >Intro Sort</button>
+                        {/* class = "not-implemented" */}
                     </div>
                 </div>
             </body>
