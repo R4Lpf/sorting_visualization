@@ -219,26 +219,27 @@ export function getHeapSortAnimations(array) {
 function heapSort(array, n, animations) {
 
     for (var i = Math.floor(n / 2); i >= 0; i--)      {
-        heap_root(array, n, i, animations);
+        heap_root(array, i, n, animations);
       }
 
     for (i = n - 1; i >= 0; i--) {
         animations.push(["comparison1", i, 0]);
-        animations.push(["swap", i, array[0]]);
         animations.push(["swap", 0, array[i]]);
+        animations.push(["swap", i, array[0]]);
         animations.push(["comparison2", i, 0]);
         swap(array, 0, i);
         n--;      
-        heap_root(array, i, 0, animations);
+        heap_root(array, 0, i, animations);
     }
 
     console.log(array)
 }
 
-function heap_root(array, len, i, animations) {
+function heap_root(array, i, len, animations) {
     var left = 2 * i + 1;
     var right = left + 1;
     var max = i; 
+    
     if (left < len){
         animations.push(["comparison1", left, max]);
         animations.push(["comparison2", left, max]);
@@ -257,12 +258,12 @@ function heap_root(array, len, i, animations) {
     
     if (max != i) {
         animations.push(["comparison1", i, max]);
-        animations.push(["swap", i, array[max]]);
         animations.push(["swap", max, array[i]]);
+        animations.push(["swap", i, array[max]]);
         animations.push(["comparison2", i, max]);
         
         swap(array, i, max);
-        heap_root(array, len, max, animations);
+        heap_root(array, max, len, animations);
     }
 }
 
@@ -552,7 +553,7 @@ function introsertionSort(array, left, right, cmpf, animations) {
         animations.push(["swap", startIdx, array[endIdx]]);
         animations.push(["comparison2", endIdx, startIdx]);
         swap(array, end, startIdx);
-        animations.push(["overwrite",end,end-1])
+        //animations.push(["overwrite",end,end-1])
         end = end - 1;
         siftDown(array, startIdx, end, cmpf, animations);
     }
@@ -563,26 +564,29 @@ function introsertionSort(array, left, right, cmpf, animations) {
 
     while (start >= startIdx) {
       siftDown(array, start, endIdx, cmpf, animations);
-      animations.push(["overwrite",start,start-1])
+      //animations.push(["overwrite",start,start-1])
       start = start - 1;
     }
   }
 
   function siftDown(array, start, end, cmpf, animations) {
-    let root = start, 
-        child, toSwap;
+    let root = start, child, toSwap;
 
     while (iLeftChild(root) <= end) {
         child = iLeftChild(root);
         toSwap = root;
+        animations.push(["comparison1", toSwap, child]);
+        animations.push(["comparison2", toSwap, child]);
         if (cmpf(array[toSwap], array[child]) < 0) {
-            animations.push(["overwrite",toSwap,child])
+            //animations.push(["overwrite",toSwap,child])
             toSwap = child;
         }
-        animations.push(["comparison1", end, child + 1]);
-        animations.push(["swap", end, array[child + 1]]);
-        animations.push(["swap", child + 1, array[end]]);
-        animations.push(["comparison2", end, child + 1]);
+        //animations.push(["comparison1", end, child + 1]);
+        //animations.push(["swap", end, array[child + 1]]);
+        //animations.push(["swap", child + 1, array[end]]);
+        //animations.push(["comparison2", end, child + 1]);
+        animations.push(["comparison1", toSwap, child]);
+        animations.push(["comparison2", toSwap, child]);
         if ((child + 1) <= end && cmpf(array[toSwap], array[child+1]) < 0){
             animations.push(["overwrite",toSwap,child+1])
             toSwap = child + 1;
