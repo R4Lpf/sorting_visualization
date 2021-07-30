@@ -365,11 +365,11 @@ function merge(array, startIdx, middleIdx, endIdx, animations) {
     let right = new Array(halfLength2);
 
     for(let x = 0; x < halfLength1; x++) {
-        animations.push(["overwrite", x, array[startIdx + x]])
+        //animations.push(["overwrite", x, array[startIdx + x]])
         left[x] = array[startIdx + x];
     }
     for(let x = 0; x < halfLength2; x++) {
-        animations.push(["overwrite", middleIdx + x, array[middleIdx + 1 + x]])
+        //animations.push(["overwrite", middleIdx + x, array[middleIdx + 1 + x]])
         right[x] = array[middleIdx + 1 + x];
     }
  
@@ -378,8 +378,8 @@ function merge(array, startIdx, middleIdx, endIdx, animations) {
     let k = startIdx;
     
     while (i < halfLength1 && j < halfLength2) {
-        animations.push(["comparison1",j,i]);
-        animations.push(["comparison2",j,i]);
+        animations.push(["comparison1",i,middleIdx + j]);
+        animations.push(["comparison2",i,middleIdx + j]);
         if (left[i] <= right[j]) {
             animations.push(["overwrite", k, left[i]])
             array[k] = left[i];
@@ -403,8 +403,8 @@ function merge(array, startIdx, middleIdx, endIdx, animations) {
     }
 
     while (j < halfLength2) {
-        animations.push(["comparison1",j,j]);
-        animations.push(["comparison2",j,j]);
+        animations.push(["comparison1",middleIdx + j, middleIdx + j]);
+        animations.push(["comparison2",middleIdx + j, middleIdx + j]);
         animations.push(["overwrite", k, right[j]])
         array[k] = right[j];
         k++;
