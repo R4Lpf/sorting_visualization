@@ -314,7 +314,7 @@ function heap_root(array, i, len, animations) {
 
 
 // #############################################################################################################################################
-// tim sort
+// tim sort GEEKS FOR GEEKS VERSION.
 
 export function getTimSortAnimations(array) {
     const animations = [];
@@ -325,8 +325,10 @@ export function getTimSortAnimations(array) {
 
 }
 
+
+
 let MIN_MERGE = 32;
- 
+
 function minRunLength(n) {
     let r = 0;
     while (n >= MIN_MERGE)
@@ -336,7 +338,7 @@ function minRunLength(n) {
     }
     return n + r;
 }
- 
+
 function timsertionSort(array, left, right, animations) {
     for(let i = left + 1; i <= right; i++) {
         let key = array[i];
@@ -357,14 +359,11 @@ function timsertionSort(array, left, right, animations) {
     }
 }
 
- 
 function merge(array, startIdx, middleIdx, endIdx, animations) {
-
     let halfLength1 = middleIdx - startIdx + 1;
     let halfLength2 = endIdx - middleIdx;
     let left = new Array(halfLength1);
     let right = new Array(halfLength2);
-
     for(let x = 0; x < halfLength1; x++) {
         //animations.push(["overwrite", x, array[startIdx + x]])
         left[x] = array[startIdx + x];
@@ -373,11 +372,11 @@ function merge(array, startIdx, middleIdx, endIdx, animations) {
         //animations.push(["overwrite", middleIdx + x, array[middleIdx + 1 + x]])
         right[x] = array[middleIdx + 1 + x];
     }
- 
+
     let i = 0;
     let j = 0;
     let k = startIdx;
-    
+ 
     while (i < halfLength1 && j < halfLength2) {
         animations.push(["comparison1",i,middleIdx + j]);
         animations.push(["comparison2",i,middleIdx + j]);
@@ -393,7 +392,7 @@ function merge(array, startIdx, middleIdx, endIdx, animations) {
         }
         k++;
     }
- 
+
     while (i < halfLength1) {
         animations.push(["comparison1",i,i]);
         animations.push(["comparison2",i,i]);
@@ -402,7 +401,6 @@ function merge(array, startIdx, middleIdx, endIdx, animations) {
         k++;
         i++;
     }
-
     while (j < halfLength2) {
         animations.push(["comparison1",middleIdx + j, middleIdx + j]);
         animations.push(["comparison2",middleIdx + j, middleIdx + j]);
@@ -412,25 +410,22 @@ function merge(array, startIdx, middleIdx, endIdx, animations) {
         j++;
     }
 }
-
 function  timSort(array, n, animations)
 {
     let minRun = minRunLength(MIN_MERGE);
-        
+     
     for(let i = 0; i < n; i += minRun){
         timsertionSort(array, i, Math.min((i + MIN_MERGE - 1), (n - 1)), animations);
     }
- 
+
     for (let size = minRun; size < n; size = 2 * size) {
         for (let left = 0; left < n; left += 2 * size) {
             let mid = left + size - 1;
             let right = Math.min((left + 2 * size - 1),(n - 1));
-
             if (mid < right) merge(array, left, mid, right, animations);
         }
     }
 }
-
 
 // #############################################################################################################################################
 // intro sort

@@ -281,8 +281,8 @@ export default class SortingVisualizer extends React.Component{
                         <button onClick = {() => this.mergeSort()}>Merge Sort</button>
                         <button onClick = {() => this.quickSort()}>Quick Sort</button>
                         <button onClick = {() => this.heapSort()}>Heap Sort</button>
-                        <button onClick = {() => this.timSort()} >Tim Sort</button>
-                        <button onClick = {() => this.introSort()} >Intro Sort</button>
+                        <button onClick = {() => this.timSort()} class = "hybrid">Tim Sort</button>
+                        <button onClick = {() => this.introSort()} class = "hybrid">Intro Sort</button>
                         {/* class = "not-implemented" */}
                     </div>
                 </div>

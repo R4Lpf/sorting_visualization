@@ -65,6 +65,10 @@ button {
 
 }
 
+.hybrid{
+    background-color: gold;
+}
+
 .not-implemented{
     background-color: rgb(231, 150, 150);
 }
