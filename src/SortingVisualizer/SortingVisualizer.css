@@ -43,6 +43,11 @@ header{
 
 }
 
+.buttons{
+    margin-bottom: 10px;
+    
+}
+
 button {
     color: rgb(36, 49, 49);
     text-transform: uppercase;
@@ -64,18 +69,56 @@ button {
     margin-right: 1px;
 
 }
-
-.hybrid{
-    background-color: gold;
-}
-
-.not-implemented{
-    background-color: rgb(231, 150, 150);
-}
-
 button:hover
 {
     transition: 0.3s;
     border-bottom: thick solid rgb(101, 214, 177);
  
 }
+
+.hybrid{
+    background-color: gold;
+}
+
+.hybrid:hover{
+    transition: 0.3s;
+    border-bottom: thick solid goldenrod;
+}
+.not-implemented{
+    background-color: rgb(231, 150, 150);
+}
+
+.slidercontainer{
+    width: 50%;
+}
+
+.slider {
+    -webkit-appearance: none;
+    width: 50%;
+    height: 25px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+  }
+  
+  .slider:hover {
+    opacity: 1;
+  }
+  
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: #04AA6D;
+    cursor: pointer;
+  }
+  
+  .slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #04AA6D;
+    cursor: pointer;
+  }

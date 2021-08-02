@@ -37,6 +37,14 @@ export default class SortingVisualizer extends React.Component{
         this.setState({array});
     }
 
+    dragArray(n){
+        const array = [];
+        for (let i = 0; i<n; i++){
+            array.push(randomIntFromInterval(5,730));
+        }
+        this.setState({array});
+    }
+
     mergeSort(){
         const animations = SortingAlgorithms.getMergeSortAnimations(this.state.array);
         console.log(animations)
@@ -285,6 +293,12 @@ export default class SortingVisualizer extends React.Component{
                         <button onClick = {() => this.introSort()} class = "hybrid">Intro Sort</button>
                         {/* class = "not-implemented" */}
                     </div>
+                    
+                </div>
+                <div class="slidecontainer">
+                    <input type="range" min="1" max="400" value="200" class="slider" id="myRange" >
+                        {array.length}
+                    </input>
                 </div>
             </body>
             
