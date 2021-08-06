@@ -8,7 +8,7 @@ import * as SortingAlgorithms from '../SortingAlgorithms/SortingAlgorithms.js'
 const ANIMATION_SPEED_MS = 1;
 
 // Change this value for the number of bars (value) in the array.
-const NUMBER_OF_ARRAY_BARS = 200;
+var NUMBER_OF_ARRAY_BARS = 200;
 
 // This is the main color of the array bars.
 const PRIMARY_COLOR = 'turquoise';
@@ -262,7 +262,10 @@ export default class SortingVisualizer extends React.Component{
     
     render(){
         const {array} = this.state;
-
+        //NUMBER_OF_ARRAY_BARS = document.getElementById("myRange").value;
+        if (document.getElementById("myRange")){
+            NUMBER_OF_ARRAY_BARS = document.getElementById("myRange").value;
+        }
         return (
             <body>
 
@@ -295,10 +298,13 @@ export default class SortingVisualizer extends React.Component{
                     </div>
                     
                 </div>
-                <div class="slidecontainer">
-                    <input type="range" min="1" max="400" value="200" class="slider" id="myRange" >
-                        {array.length}
-                    </input>
+                <div>
+                    <div class="slidercontainer">
+                        <input type="range" min="9" max="401" value={NUMBER_OF_ARRAY_BARS} class="slider" id="myRange" onChange = {() => this.dragArray(NUMBER_OF_ARRAY_BARS)}></input>
+                    </div>
+                    <div class="valuecontainer">
+                            Value = {array.length}
+                    </div>
                 </div>
             </body>
             
